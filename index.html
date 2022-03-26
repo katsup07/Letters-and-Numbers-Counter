@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Reduce!</title>
+
+</head>
+
+<body>
+  <p class="title">Letters and Numbers Counter</p>
+  <div class="wrapper"></div>
+  <label for="textInput"></label>
+  <input placeHolder='Enter some text' type="text" id='textInput' style="border:2px solid salmon">
+  <input type="button" value="Submit" class="button" style="border:2px solid salmon;">
+
+
+  <script>
+
+    // Get the text from a user
+    // Count how many times each letter and number occurs
+    //Output results on webpage for user
+    function letterAndNumberChecker(character) {
+      return character.match(/[a-z0-9]/i);  //Use a regular expression. Looks for matches of what's in square brackets. i is for case 'insensitive' 
+    }
+
+    function toLowercase(letterOrNumber) {
+      return letterOrNumber.toLowerCase();
+    }
+
+    function instanceCounter(counts, char) { //counts is an object. char is a string item from the lettersAndNumbers array. The object will contain a-z, 1-9
+      !counts[char] ? counts[char] = 1 : counts[char]++;//no character property yet? make one and set to 1. If there is a character property already increment it by 1.
+      return counts;
+    }
+
+    function displayOnPage(lettersAndNumbers) {
+      charArrays = Object.entries(lettersAndNumbers);
+      mostToLeast = charArrays.sort((a, b) => b[1] - a[1]);
+      let html = '';
+      for (i = 0; i < charArrays.length; i++) {
+        [char, number] = charArrays[i];
+        html += `<div class='item'><strong><span style="color: red;">${char}</span><strong> is used ${number} time${number === 1 ? '' : 's'}</div>`;
+        let output = document.querySelector('.wrapper');
+        output.innerHTML = html;
+      }
+    }
+
+    function letterAndNumberCounter() {
+      let inputText = input.value;//(0)Get the user input
+      const characters = inputText.split('');//(1) Split into an array of characters
+      characters.forEach((character, index) => character.includes('\n') ? characters[index] = 'n' : '');//(2)Change /n to n.
+      const lettersAndNumbers = characters
+        .filter(letterAndNumberChecker)  //(3) Filter out everything else except letters and numbers.
+        .map(toLowercase)//(4) Change upper case into lowercase with map().
+        .reduce(instanceCounter, {})//(5) Count how many times each letter and number occur in an object.
+      displayOnPage(lettersAndNumbers);
+    }
+
+    let input = document.querySelector('#textInput');
+    const submitButton = document.querySelector('input.button');
+    //input.addEventListener('input', letterAndNumberCounter);
+    submitButton.addEventListener('click', letterAndNumberCounter);
+  </script>
+
+  <style>
+    body {
+      min-width: 90vw;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: rgb(40, 85, 168);
+    }
+
+    .title {
+      display: flex;
+      font-size: 2rem;
+      background: rgb(0, 0, 0);
+      margin: 10px;
+      padding: 5px;
+      text-align: center;
+      border: 2px solid salmon;
+      border-radius: 3%;
+      color: rgb(255, 255, 255);
+    }
+
+    .wrapper {
+      min-width: 90vw;
+      min-height: 68vh;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgb(0, 0, 0);
+      gap: 5px;
+      margin: 0;
+      border: 2px solid salmon;
+      border-radius: 1%;
+    }
+
+    div.item {
+      display: flex;
+      flex: 0 1 auto;
+      margin: 10px;
+      padding: 5px;
+      border: 2px solid salmon;
+      background: white;
+      font-size: 1.1rem;
+      transition: all 0.5s ease-in;
+
+    }
+
+    input.button {
+      margin: 5px;
+      font-size: 1.1rem;
+      padding: 10px;
+      background-color: rgb(177, 63, 177);
+      border: 2px solid black;
+      border-radius: 5px;
+      box-shadow: 3px 3px rgba(0, 0, 0, 0.274);
+
+    }
+
+    .button:hover {
+      background-color: #000000;
+      color: rgb(177, 63, 177)
+    }
+
+    .button:active {
+      background-color: #000000;
+      box-shadow: 4px 5px rgba(43, 42, 42, 0.575);
+      transform: translate(2px, 2px);
+    }
+
+    #textInput {
+      font-size: 1rem;
+      background-color: rgb(0, 0, 0);
+      color: rgba(255, 255, 255, 0.493);
+      margin: 10px;
+      text-align: center;
+    }
+  </style>
+</body>
+
+</html>
